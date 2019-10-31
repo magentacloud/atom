@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -87,7 +88,8 @@ public class Game {
     private String[] readDictionary() {
         String[] dictionary = new String[0];
         try {
-            String input = new String(Files.readAllBytes(Paths.get("dictionary.txt")));
+            System.out.println(System.getProperty("user.dir"));
+            String input = new String(Files.readAllBytes(Paths.get(".\\homeworks\\HW2\\dictionary.txt")));
             dictionary = input.split("\n");
         } catch (IOException e) {
             e.printStackTrace();
