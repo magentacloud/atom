@@ -94,7 +94,7 @@ public class Game {
         String[] dictionary = new String[0];
         try {
             System.out.println(System.getProperty("user.dir"));
-            String input = new String(Files.readAllBytes(Paths.get(".\\homeworks\\HW2\\dictionary.txt")));
+            String input = new String(Files.readAllBytes(Paths.get("dictionary.txt")));
             dictionary = input.split("\n");
         } catch (IOException e) {
             e.printStackTrace();
