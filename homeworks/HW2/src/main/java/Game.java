@@ -18,6 +18,7 @@ public class Game {
     private int numberOfAttempts = 10;
     private String[] dictionary;
     boolean isEnd = false;
+
     public Game() {
         this.dictionary = readDictionary();
     }
@@ -81,7 +82,7 @@ public class Game {
         if (hiddenWord.equals(typedWord)) {
             System.out.print("You won!");
             isEnd = true;
-        }else {
+        } else {
             int bulls = countBulls(hiddenWord, typedWord);
             int cows = countCows(hiddenWord, typedWord) - bulls;
             System.out.print("Cows: " + cows + "\n");
