@@ -14,13 +14,14 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Game {
-    final static Logger logger = (Logger) LogManager.getLogger();
+    final Logger logger = (Logger) LogManager.getLogger();
     private int numberOfAttempts = 10;
     private String[] dictionary;
     boolean isEnd = false;
-    public  Game() {
+    public Game() {
         this.dictionary = readDictionary();
     }
+
     public void start() {
         System.out.println("Welcome to Bulls and Cows game!");
         String word = getWordFromDictionary();
@@ -31,7 +32,7 @@ public class Game {
         while (!isEnd) {
             String answer = "";
             while (answer.length() != word.length()) {
-               answer = getWordFromUser(bufferedReader);
+                answer = getWordFromUser(bufferedReader);
             }
             check(word, answer);
             if (numberOfAttempts == 0) {
@@ -47,10 +48,11 @@ public class Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(ch.equals("Y")) {
+        if (ch.equals("Y")) {
             this.start();
         }
     }
+
     private String getWordFromUser(BufferedReader bufferedReader) {
         String answer = "";
         try {
@@ -60,6 +62,7 @@ public class Game {
         }
         return answer;
     }
+
     int countCows(String hiddenWord, String typedWord) {
         int cowsCount = 0;
         LinkedHashSet<Character> cows = new LinkedHashSet();
@@ -73,6 +76,7 @@ public class Game {
         }
         return cowsCount;
     }
+
     private void check(String hiddenWord, String typedWord) {
         if (hiddenWord.equals(typedWord)) {
             System.out.print("You won!");
@@ -83,8 +87,8 @@ public class Game {
             System.out.print("Cows: " + cows + "\n");
             System.out.print("Bulls: " + bulls + "\n");
         }
-
     }
+
     private String[] readDictionary() {
         String[] dictionary = new String[0];
         try {
@@ -96,10 +100,12 @@ public class Game {
         }
         return dictionary;
     }
+
     String getWordFromDictionary() {
         int randomNum = ThreadLocalRandom.current().nextInt(0, dictionary.length + 1);
         return this.dictionary[randomNum];
     }
+
     private int countBulls(String hiddenWord, String typedWord) {
         int bulls = 0;
         for (int i = 0; i < hiddenWord.length(); i++) {
