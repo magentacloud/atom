@@ -40,11 +40,44 @@ public class ChatClient {
     //POST host:port/chat/say?name=my_name
     //Body: "msg='my_message'"
     public static Response say(String name, String msg) throws IOException {
-        throw new UnsupportedOperationException();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        Request request = new Request.Builder()
+                .post(RequestBody.create(mediaType, "msg='" + msg +"'"))
+                .url(PROTOCOL + HOST + PORT + "/chat/say?name=" + name)
+                .build();
+        return client.newCall(request).execute();
     }
 
     //GET host:port/chat/online
     public static Response viewOnline() throws IOException {
-        throw new UnsupportedOperationException();
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        Request request = new Request.Builder()
+                .get()
+                .url(PROTOCOL + HOST + PORT + "/chat/online")
+                .addHeader("host", HOST + PORT)
+                .build();
+        return client.newCall(request).execute();
+    }
+
+    //POST host:port/chat/ban?name=my_name
+    public static Response ban(String name) throws IOException {
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        Request request = new Request.Builder()
+                .post(RequestBody.create(mediaType, ""))
+                .url(PROTOCOL + HOST + PORT + "/chat/ban?name=" + name)
+                .addHeader("host", HOST + PORT)
+                .build();
+        return client.newCall(request).execute();
+    }
+
+    //POST host:port/chat/clear
+    public static Response clear() throws IOException {
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        Request request = new Request.Builder()
+                .post(RequestBody.create(mediaType, ""))
+                .url(PROTOCOL + HOST + PORT + "/chat/clear")
+                .addHeader("host", HOST + PORT)
+                .build();
+        return client.newCall(request).execute();
     }
 }

@@ -16,6 +16,7 @@ import java.io.IOException;
 @SpringBootTest(classes = {ChatApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class ChatClientTest {
     private static String MY_NAME_IN_CHAT = "I_AM_STUPID";
+    private static String ANOTHER_NAME_IN_CHAT = "1337";
     private static String MY_MESSAGE_TO_CHAT = "SOMEONE_KILL_ME";
 
     @Test
@@ -47,6 +48,22 @@ public class ChatClientTest {
     @Test
     public void say() throws IOException {
         Response response = ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
+        System.out.println("[" + response + "]");
+        System.out.println(response.body().string());
+        Assert.assertEquals(200, response.code());
+    }
+
+    @Test
+    public void ban() throws IOException {
+        Response response = ChatClient.ban(ANOTHER_NAME_IN_CHAT);
+        System.out.println("[" + response + "]");
+        System.out.println(response.body().string());
+        Assert.assertEquals(200, response.code());
+    }
+
+    @Test
+    public void clear() throws IOException {
+        Response response = ChatClient.clear();
         System.out.println("[" + response + "]");
         System.out.println(response.body().string());
         Assert.assertEquals(200, response.code());

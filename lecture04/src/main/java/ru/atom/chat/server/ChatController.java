@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class ChatController {
     private Queue<String> messages = new ConcurrentLinkedQueue<>();
     private Map<String, String> usersOnline = new ConcurrentHashMap<>();
+    private Map<String, String> bannedUsers = new ConcurrentHashMap<>();
 
     /**
      * curl -X POST -i localhost:8080/chat/login -d "name=I_AM_STUPID"
@@ -53,7 +54,7 @@ public class ChatController {
             method = RequestMethod.GET,
             produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity online() {
-        String responseBody = String.join("\n", usersOnline.keySet().stream().sorted().collect(Collectors.toList()));
+        String responseBody = String.join("\n", usersOnline.keySet().stream().sorted().collect(Collectors.toList())) + "\n";
         return ResponseEntity.ok(responseBody);
     }
 
@@ -82,6 +83,12 @@ public class ChatController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> say(@RequestParam String name, String msg) {
+        if (!usersOnline.containsKey(name)) {
+            login(name);
+        }
+        if (bannedUsers.containsKey(name)){
+            return ResponseEntity.badRequest().body("You are banned...");
+        }
         messages.add("[" + name + "] " + msg);
         return ResponseEntity.ok().build();
     }
@@ -96,8 +103,41 @@ public class ChatController {
             produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity chat() {
         String responseBody = "";
-        responseBody = messages.toString();
+        for (String msg: messages) {
+            responseBody += msg + "\n";
+        }
+        return ResponseEntity.ok(responseBody);
+    }
 
+    /**
+     * curl -i localhost:8080/chat/ban -d "name=I_AM_STUPID"
+     */
+    @RequestMapping(
+            path = "ban",
+            method = RequestMethod.POST,
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity ban(@RequestParam("name") String name) {
+        if (bannedUsers.containsKey(name)) {
+            return ResponseEntity.badRequest().body("User " + name + "already banned\n");
+        }
+        String responseBody = "User " + name + " has been banned in this chat\n";
+        bannedUsers.put(name, name);
+        messages.add(name + " has been banned in this chat");
+        return ResponseEntity.ok(responseBody);
+    }
+
+    /**
+     * curl -i localhost:8080/chat/clear
+     */
+    @RequestMapping(
+            path = "clear",
+            method = RequestMethod.POST,
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity clear() {
+        messages.clear();
+        String responseBody = "Chat has been cleared";
         return ResponseEntity.ok(responseBody);
     }
 }
