@@ -54,7 +54,12 @@ public class ChatController {
             method = RequestMethod.GET,
             produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity online() {
-        String responseBody = String.join("\n", usersOnline.keySet().stream().sorted().collect(Collectors.toList())) + "\n";
+        String responseBody = String
+                .join("\n", usersOnline
+                        .keySet()
+                        .stream()
+                        .sorted()
+                        .collect(Collectors.toList())) + "\n";
         return ResponseEntity.ok(responseBody);
     }
 
@@ -77,6 +82,7 @@ public class ChatController {
     /**
      * curl -X POST -i localhost:8080/chat/say -d "name=I_AM_STUPID&msg=Hello everyone in this chat"
      */
+
     @RequestMapping(
             path = "say",
             method = RequestMethod.POST,
@@ -86,7 +92,7 @@ public class ChatController {
         if (!usersOnline.containsKey(name)) {
             login(name);
         }
-        if (bannedUsers.containsKey(name)){
+        if (bannedUsers.containsKey(name)) {
             return ResponseEntity.badRequest().body("You are banned...");
         }
         messages.add("[" + name + "] " + msg);
